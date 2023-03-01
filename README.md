@@ -6,6 +6,7 @@ For Bash terminal:
 3. `cargo run`
 
 For Insomnia (API client):
+
 4. POST request:
 - Address: `127.0.0.1:3000/data`
 - JSON body: 
