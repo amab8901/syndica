@@ -30,3 +30,5 @@ For Insomnia (API client):
 * If your GET request is less than 30 seconds after a previous GET request, you will get cached value (regardless of your previous usage of POST request).
 
 * If your GET request is more than 30 seconds after a previous GET request, you will get non-cached value (regardless of your previous usage of POST request).
+
+* Run a GET request (non-cached value) and wait for longer than 30 seconds before doing another GET request (non-cached value). Then wait less than 30 seconds to next GET request (cached value)
