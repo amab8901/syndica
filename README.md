@@ -21,7 +21,7 @@ For Insomnia (API client):
 - (no body)
 6. go back to step 4 (and then 5) with different `val`:s and different `id`:s. Note that 32383 is the maximum value allowed. Make sure that your choice of `id` is synchronized with the suffix of the address in the GET request in step 5. 
 
-# Scenarios:
+# Test Scenarios:
 
 * If you run GET when the cache is empty (i.e. when you never used the server before), server will give 500 Internal Server Error and put 0 in the cache. If you run GET request the 2nd time, then it will return 0 from the cache.
 
