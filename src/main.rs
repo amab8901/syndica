@@ -88,15 +88,17 @@ pub mod get {
     ) -> impl IntoResponse {  
         // cache
         if initialized.lock().await.clone() && last_get.lock().await.elapsed().as_secs() < 30 {
-            read_data_with_cache(cached_data).await
+            read_data_with_cache(cached_data, last_get).await
         } else {
             let mut n = initialized.lock().await;
             *n = true;
-            read_data_without_cache(string, cached_data).await
+            read_data_without_cache(string, cached_data, last_get).await
         }
     }
     
-    pub async fn read_data_with_cache(cached_data: Arc<Mutex<u32>>) -> (StatusCode, axum::Json<Response>) {
+    pub async fn read_data_with_cache(cached_data: Arc<Mutex<u32>>, last_get: Arc<Mutex<Instant>>) -> (StatusCode, axum::Json<Response>) {
+        let mut lg = last_get.lock().await;
+        *lg = Instant::now();
         let response = Response {
             data: cached_data.lock().await.clone(),
             cached: true,
@@ -105,7 +107,9 @@ pub mod get {
         
     }
     
-    pub async fn read_data_without_cache(mut string: String, cached_data: Arc<Mutex<u32>>) -> (StatusCode, axum::Json<Response>) {
+    pub async fn read_data_without_cache(mut string: String, cached_data: Arc<Mutex<u32>>, last_get: Arc<Mutex<Instant>>) -> (StatusCode, axum::Json<Response>) {
+        let mut lg = last_get.lock().await;
+        *lg = Instant::now();
         string.push_str(".dat");
         let file_str = string.strip_prefix(":").unwrap();
         if let Ok(data) = std::fs::read_to_string(file_str) {
